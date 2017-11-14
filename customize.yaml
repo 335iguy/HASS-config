@@ -1,0 +1,70 @@
+### CUSTOMIZE ###
+## Default View ##
+media_player.meowcast:
+  icon: mdi:google-chrome 
+## OTHER ##
+# Dark Sky Weather #
+sensor.dark_sky_daily_high_temperature:
+  friendly_name: Today's High 
+sensor.dark_sky_daily_low_temperature:
+  friendly_name: Today's Low 
+sensor.dark_sky_temperature:
+  friendly_name: Current Temperature
+# Web Links #
+weblink.router:
+  icon: mdi:router-wireless
+device_tracker.pixel2_bri:
+  friendly_name: Bri 
+device_tracker.pixel_andrew:
+  friendly_name: Andrew 
+device_tracker.henneseyvenom:
+  friendly_name: HenneseyVenom
+  icon: mdi:windows 
+sensor.home_to_andrews_work:
+  icon: mdi:desktop-classic
+sensor.home_to_bris_work:
+  icon: mdi:bug 
+sensor.home_to_shop:
+  icon: mdi:weight 
+sensor.bris_work_to_home:
+  icon: mdi:home 
+group.BeamerAndStella:
+  friendly_name: Beamer and Stella 
+group.cleanthings:
+  friendly_name: Clean Stuffs 
+group.masterbedroom:
+  friendly_name: Master Bedroom
+group.TVControl:
+  friendly_name: TV Control 
+group.outsidetemp:
+  friendly_name: Charlotte Weather 
+group.DSClimate:
+  friendly_name: Ecobee - Downstairs
+sensor.fan_switch_up:
+  icon: mdi:fan 
+sensor.target_temp_up:
+  icon: mdi:target 
+group.usclimate:
+  friendly_name: Ecobee - Upstairs 
+sensor.fan_switch_down:
+  icon: mdi:fan 
+sensor.target_temp_down:
+  icon: mdi:target 
+zone.awork:
+  friendly_name: Trox Tech
+zone.bwork:
+  friendly_name: Steritech 
+zone.home:
+  friendly_name: Home
+sensor.pollen_level:
+  icon: mdi:flower 
+climate.downstairs:
+  entity_picture: /local/images/ecobee.jpg
+climate.upstairs:
+  entity_picture: /local/images/ecobee.jpg
+script.ccradio:
+  friendly_name: Start Playing
+  icon: mdi:play
+script.goodnight:
+  icon: mdi:sleep
+

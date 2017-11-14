@@ -1,0 +1,206 @@
+### SENSORS ###
+#sensor 1
+  - platform: bitcoin
+    display_options:
+      - exchangerate
+      - market_price_usd
+    scan_interval: 3600
+#sensor 2
+  - platform: systemmonitor
+    resources:
+      - type: memory_use
+      - type: processor_use
+#sensor 3
+#  - platform: speedtest
+#    minute: 0 monitored_conditions:
+#      - ping - download - upload server_id: 9461 sensor 4
+  - platform: darksky
+    api_key: !secret weather_key
+    monitored_conditions:
+      - temperature
+      - temperature_max
+      - temperature_min
+#sensor 8
+  - platform: mqtt
+    name: "OfficeTemp"
+    state_topic: "OfficeESP/temp/Temperature"
+    qos: 0
+    unit_of_measurement: "ºF"
+#sensor 9
+  - platform: mqtt
+    name: "OfficeHumid"
+    state_topic: "OfficeESP/temp/Humidity"
+    qos: 0
+    unit_of_measurement: "%"
+#sensor 12
+  - platform: mqtt
+    name: "OfficeMotion"
+    state_topic: "OfficeESP/motion/aktiv"
+    qos: 0
+    sensor_class: motion
+#sensor 13
+  - platform: template
+    sensors:
+      current_activity:
+        friendly_name: 'Current Activity'
+        value_template: '{{ states.remote.livingroom.attributes.current_activity }}'
+  - platform: google_travel_time
+    name: Home to Bri's Work
+    api_key: !secret gmaps_api
+    origin: zone.home
+    destination: zone.bwork
+  - platform: google_travel_time
+    name: Home to Andrew's Work
+    api_key: !secret gmaps_api
+    origin: zone.home
+    destination: zone.awork
+#sensor 15
+  - platform: rest
+    name: Pollen Level
+    resource: "https://www.pollen.com/api/forecast/current/pollen/28213"
+    value_template: "{{value_json.Location.periods[1].Index}}"
+    scan_interval: 21600
+    headers:
+       Referer: "https://www.pollen.com"
+#sensor 16
+  - platform: rest
+    resource: https://pypi.python.org/pypi/homeassistant/json
+    name: HA Current Version
+    value_template: '{{ value_json.info.version }}'
+#sensor 17
+  - platform: template
+    sensors:
+      operating_mode_down:
+        friendly_name: "Current Operation"
+        value_template: "{{ states.climate.downstairs.attributes.operation }}"
+        icon_template: "{%- if states.climate.downstairs.attributes.operation == 'idle' %}mdi:pause{%- elif states.climate.downstairs.attributes.operation == 'cool' %}mdi:snowflake{%- elif states.climate.downstairs.attributes.operation == 'heat' %}mdi:fire{% else %}{%- endif %}"
+#sensor 18
+  - platform: template
+    sensors:
+      mode_down:
+        friendly_name: 'Set Mode'
+        value_template: "{{ states.climate.downstairs.attributes.operation_mode }}"
+        icon_template: "{%- if states.climate.downstairs.attributes.operation_mode == 'idle' %}mdi:pause{%- elif states.climate.downstairs.attributes.operation_mode == 'cool' %}mdi:snowflake{%- elif states.climate.downstairs.attributes.operation_mode == 'heat' %}mdi:fire{% else %}{%- endif %}"
+#sensor 19
+  - platform: template
+    sensors:
+      fan_switch_down:
+        friendly_name: 'Fan Switch'
+        value_template: "{{ states.climate.downstairs.attributes.fan }}"
+#sensor 20
+  - platform: template
+    sensors:
+      target_temp_down:
+        friendly_name: 'Target Temp'
+        value_template: "{{ states.climate.downstairs.attributes.temperature }}"
+#sensor 21
+  - platform: template
+    sensors:
+      operating_mode_up:
+        friendly_name: 'Current Operation'
+        value_template: "{{ states.climate.upstairs.attributes.operation }}"
+        icon_template: "{%- if states.climate.upstairs.attributes.operation == 'idle' %}mdi:pause{%- elif states.climate.upstairs.attributes.operation == 'cool' %}mdi:snowflake{%- elif states.climate.upstairs.attributes.operation == 'heat' %}mdi:fire{% else %}{%- endif %}"
+#sensor 22
+  - platform: template
+    sensors:
+      mode_up:
+        friendly_name: 'Set Mode'
+        value_template: "{{ states.climate.upstairs.attributes.operation_mode }}"
+        icon_template: "{%- if states.climate.upstairs.attributes.operation_mode == 'idle' %}mdi:pause{%- elif states.climate.upstairs.attributes.operation_mode == 'cool' %}mdi:snowflake{%- elif states.climate.upstairs.attributes.operation_mode == 'heat' %}mdi:fire{% else %}{%- endif %}"
+#sensor 23
+  - platform: template
+    sensors:
+      fan_switch_up:
+        friendly_name: 'Fan Switch'
+        value_template: "{{ states.climate.upstairs.attributes.fan }}"
+#sensor 24
+  - platform: template
+    sensors:
+      target_temp_up:
+        friendly_name: 'Target Temp'
+        value_template: "{{ states.climate.upstairs.attributes.temperature }}"
+#sensor 25
+  - platform: template
+    sensors:
+      select_mode_up:
+        friendly_name: 'Mode Selected'
+        value_template: "{{ states.climate.upstairs.attributes.mode }}"
+#sensor 26
+  - platform: template
+    sensors:
+      select_mode_down:
+        friendly_name: 'Mode Selected'
+        value_template: "{{ states.climate.downstairs.attributes.mode }}"
+#sensor 27
+  - platform: template
+    sensors:
+      pixel2_battery:
+        friendly_name: 'Pixel 2 Battery'
+        unit_of_measurement: "%"
+        value_template: "{{states.device_tracker.pixel2_bri.attributes.battery}}"
+        icon_template: "{%- if states.device_tracker.pixel2_bri.attributes.battery >= '95' %}mdi:battery{%- elif states.device_tracker.pixel2_bri.attributes.battery == '100' %}mdi:battery{%- elif states.device_tracker.pixel2_bri.attributes.battery <= '15' %}mdi:battery-outline{% else %}mdi:battery-{{(states.device_tracker.pixel2_bri.attributes.battery|float / 10)|round*10}}{%- endif %}"
+#sensor 28
+  - platform: template
+    sensors:
+      pixel_battery:
+        friendly_name: "Pixel Battery"
+        unit_of_measurement: "%"
+        value_template: "{{states.device_tracker.pixel_andrew.attributes.battery}}"
+        icon_template: "{%- if states.device_tracker.pixel_andrew.attributes.battery >= '95' %}mdi:battery{%- elif states.device_tracker.pixel_andrew.attributes.battery == '100' %}mdi:battery{%- elif states.device_tracker.pixel_andrew.attributes.battery <= '15' %}mdi:battery-outline{% else %}mdi:battery-{{(states.device_tracker.pixel_andrew.attributes.battery|float / 10)|round*10}}{%- endif %}"
+#sensor 29
+  - platform: mqtt
+    state_topic: "homeassistant/sensor/honeywell"
+    name: "Garage Side Door"
+    qos: 0
+    device_class: opening
+    value_template: '{% if (value_json.id is equalto 235224) and (value_json.event is equalto 160) %} open {% elif (value_json.id is equalto 235224) and (value_json.event is equalto 128) %} closed {% else %} {{states.sensor.garage_door.state}} {% endif %}'
+#sensor 30
+  - platform: mqtt
+    state_topic: "homeassistant/sensor/honeywell"
+    name: "Front Door"
+    qos: 0
+    device_class: opening
+    value_template: '{% if (value_json.id is equalto 302835) and (value_json.event is equalto 160) %} open {% elif (value_json.id is equalto 302835) and (value_json.event is equalto 128) %} closed {% else %} {{states.sensor.garage_door.state}} {% endif %}'
+#sensor 31
+  - platform: mqtt
+    state_topic: "homeassistant/sensor/honeywell"
+    name: "Sliding Glass Door"
+    qos: 0
+    device_class: opening
+    value_template: '{% if (value_json.id is equalto 124778) and (value_json.event is equalto 160) %} open {% elif (value_json.id is equalto 124778) and (value_json.event is equalto 128) %} closed {% else %} {{states.sensor.garage_door.state}} {% endif %}'
+#sensor 32
+  - platform: history_stats
+    name: AC Upstairs
+    entity_id: sensor.operating_mode_up
+    state: 'cool'
+    type: time
+    end: '{{ now().replace(hour=0).replace(minute=0).replace(second=0) }}'
+    duration:
+      hours: 24
+#sensor 33
+  - platform: history_stats
+    name: Heat Upstairs
+    entity_id: sensor.operating_mode_up
+    state: 'heat'
+    type: time
+    end: '{{ now().replace(hour=0).replace(minute=0).replace(second=0) }}'
+    duration:
+      hours: 24
+#sensor 34
+  - platform: history_stats
+    name: Heat Downstairs
+    entity_id: sensor.operating_mode_down
+    state: 'heat'
+    type: time
+    end: '{{ now().replace(hour=0).replace(minute=0).replace(second=0) }}'
+    duration:
+      hours: 24
+#sensor 35
+  - platform: history_stats
+    name: AC Downstairs
+    entity_id: sensor.operating_mode_down
+    state: 'cool'
+    type: time
+    end: '{{ now().replace(hour=0).replace(minute=0).replace(second=0) }}'
+    duration:
+      hours: 24

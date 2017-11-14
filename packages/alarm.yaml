@@ -1,0 +1,194 @@
+group:
+  alarm_panel_card:
+   name: Alarm
+   entities:
+     - alarm_control_panel.ha_alarm
+  AlarmStuff:
+    - alarm_control_panel.ha_alarm
+    - sensor.sliding_glass_door
+    - sensor.front_door
+    - sensor.garage_side_door
+    - binary_sensor.downstairs_occupancy
+    - binary_sensor.master_bedroom_occupancy
+##############################################################################
+###### see home mode package for setting of the mode house is in      ########
+######   ie sleep home or away  (sets cameras thermostat and some lights  ####
+##############################################################################
+alarm_control_panel:
+  - platform: manual
+    name: "HA Alarm"
+    code: !secret alarm_code
+    trigger_time: 10
+    pending_time: 30
+    disarm_after_trigger: false
+automation:
+  - alias: rerun alarm
+    initial_state: 'on'
+    trigger:
+      - platform: state
+        entity_id: alarm_control_panel.ha_alarm
+        to: 'triggered'
+    condition:
+      - condition: state
+        entity_id: alarm_control_panel.ha_alarm
+        state: 'triggered'
+    action:
+      - delay: '00:00:02'
+      - service: tts.google_say
+        data:
+          entity_id: media_player.living_room
+          message: 'Alarm activated. Leave the premesis now!'
+      - service: script.turn_on
+        data:
+          entity_id: script.light_flash
+      - delay: '00:00:10'
+      - service: light.turn_off
+        entity_id: group.all_lights
+        
+
+########################################################
+#        Alarm setting for away mode
+########################################################
+  - alias: 'Trigger alarm when house mode is in away mode'
+    initial_state: 'on'
+    trigger:
+      - platform: state
+        entity_id: 
+          - sensor.front_door
+          - sensor.garage_side_door
+          - sensor.sliding_glass_door
+        to: 'open'
+    condition:
+      - condition: state
+        entity_id: alarm_control_panel.ha_alarm
+        state: armed_away
+    action:
+      - service: alarm_control_panel.alarm_trigger
+        entity_id: alarm_control_panel.ha_alarm
+      - service: tts.google_say
+        data:
+          entity_id: media_player.livingroom
+          message: 'Motion Detected'
+      - service: script.sound_loop
+      - service: light.turn_on
+        data:
+          entity_id: group.all_lights
+          flash: short
+      - service: light.turn_off
+        entity_id: group.all_lights
+      - service: notify.Pushbullet
+        data:
+          message: 'An alarm has been Triggered!'
+        data_template:
+          message: >
+            An alarm has been Triggered at the {% if is_state('sensor.front_door', 'open') %}
+            Front Door{% elif is_state('sensor.garage_side_door', 'open') %}
+            Garage Side Door{% elif is_state('sensor.sliding_glass_door', 'open') %}
+            Sliding Glass Door{% endif %}
+########################################################
+#        Door open soundoff
+########################################################
+  - alias: 'Trigger when door is opened'
+    initial_state: 'on'
+    trigger:
+      - platform: state
+        entity_id: 
+          - sensor.front_door
+          - sensor.garage_side_door
+          - sensor.sliding_glass_door
+        to: 'open'
+    action:
+      - service: media_player.volume_set
+        data:
+          entity_id: media_player.living_room
+          volume_level: '.60'
+      - service: media_player.play_media
+        data_template:
+           entity_id: media_player.living_room
+           media_content_id: "https://12038hass.duckdns.org/local/media/door.mp3"
+           media_content_type: audio/mp3
+#################################################
+#             Alarm Auto Arm Away when LEAVE                       #
+#################################################
+#  - alias: 'Alarm Away when Leave home'
+#    initial_state: 'on'
+#    trigger:
+#      - platform: state
+#        entity_id: sensor.set_hold_mode
+#        to: 'away'
+#      - platform: state
+#        entity_id: input_boolean.boolean_away
+#        to: 'on'
+#    action:
+#      - service: alarm_control_panel.alarm_arm_away
+#        entity_id: alarm_control_panel.ha_alarm
+#      data:
+#        code: xxxx
+
+#################################################
+#          Alarm Auto DISARM when RETURN                         #
+#################################################
+#  - alias: 'Alarm disarm when return home'
+#    initial_state: 'on'
+#    trigger:
+#      - platform: state
+#        entity_id: sensor.set_hold_mode
+#        to: 'home'
+#      - platform: state
+#        entity_id: input_boolean.boolean_home
+#        to: 'on'
+#    action:
+#      - service: alarm_control_panel.alarm_disarm
+#        entity_id: alarm_control_panel.ha_alarm
+#      - service: light.turn_off
+#        entity_id: light.light_bulb
+#      data:
+#        code: xxxx
+
+######################################################
+#        Alarm auto arm home when house is in sleep
+######################################################
+#  - alias: 'Alarm set armed home'
+#    initial_state: 'on'
+#    trigger:
+#      - platform: state
+#        entity_id: sensor.set_hold_mode
+#        to: 'sleep'
+#      - platform: state
+#        entity_id: input_boolean.boolean_sleep
+#        to: 'on'
+#    action:
+#      - service: alarm_control_panel.alarm_arm_home
+#        entity_id: alarm_control_panel.ha_alarm
+script:
+  sound_loop:
+    alias: Sound loop
+    sequence:
+      - service: media_player.play_media
+        data_template:
+          entity_id: media_player.living_room
+          media_content_id: "https://12038hass.duckdns.org/local/media/alarm.mp3"
+          media_content_type: audio/mp3
+  light_flash:
+    alias: Light flash on
+    sequence:
+      - service: homeassistant.turn_on
+        data:
+          entity_id: group.all_lights
+      - delay:
+          seconds: 1
+      - service: homeassistant.turn_off
+        data:
+          entity_id: group.all_lights
+      - service: script.turn_on
+        data:
+          entity_id: script.light_loop
+  light_loop:
+    alias: Light flash loop
+    sequence:
+      - delay:
+          # time for flash light off
+          seconds: 1
+      - service: script.turn_on
+        data:
+          entity_id: script.light_flash

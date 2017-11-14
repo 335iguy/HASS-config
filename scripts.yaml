@@ -1,0 +1,45 @@
+  ccradio:
+    alias: Play Radio on Chromecast Audio
+    sequence:
+      -  service: media_player.play_media
+         data_template:
+           entity_id: >
+            {% if is_state("input_select.chromecast_radio", "Livingroom") %} media_player.living_room
+            {% elif is_state("input_select.chromecast_radio", "MasterBedroom") %} media_player.master_bedroom_speaker
+            {% elif is_state("input_select.chromecast_radio", "Everywhere") %} media_player.house_group
+            {% endif %}
+           media_content_id: >
+            {% if is_state("input_select.radio_station", "NPR WFAE") %} http://wfae.iad.streamguys1.com/wfae1
+            {% elif is_state("input_select.radio_station", "Man Up") %} https://c2.prod.playlists.ihrhls.com/1633/playlist.m3u8
+            {% elif is_state("input_select.radio_station", "The End") %} https://c7.prod.playlists.ihrhls.com/1597/playlist.m3u8
+            {% elif is_state("input_select.radio_station", "BBC Radio 1") %} http://bbcmedia.ic.llnwd.net/stream/bbcmedia_radio1_mf_p
+            {% elif is_state("input_select.radio_station", "DnBRadio") %} http://source.dnbradio.com:8000/dnbradio_main.mp3
+            {% endif %}
+           media_content_type: 'audio/mp4'
+  daylight_lights:
+    alias: Turn All Lights to Daylight
+    sequence:
+      - service: light.turn_on
+        data:
+          entity_id:
+            - light.couch_left
+            - light.couch_right
+            - light.google_lamp
+          transition: 55
+          brightness: 254
+          color_temp: 250
+  set_currenttheme:
+    alias: 'Set Current Theme'
+    sequence:
+      - service: frontend.set_theme
+        data_template:
+          name: '{{states.input_select.current_theme.state}}'
+  update_github:
+    sequence:
+      - service: shell_command.update_git
+  test_script:
+    sequence:
+      - service: tts.google_say
+        entity_id: media_player.living_room
+        data:
+          message: 'this is a test.'

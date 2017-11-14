@@ -1,0 +1,61 @@
+  dishwasher_status:
+    name: Dishwasher Status
+    options:
+      - Dirty
+      - Running
+      - Drying
+      - Clean
+    initial: Dirty
+    icon: mdi:washing-machine
+  washing_machine_status:
+    name: Washer Status
+    options:
+      - Idle
+      - Running
+      - Clean
+    initial: Idle
+    icon: mdi:washing-machine
+  dryer_status:
+    name: Dryer Status
+    options:
+      - Idle
+      - Running
+      - Dried
+    initial: Idle
+    icon: mdi:washing-machine
+  cats_fed:
+    name: Have the Cats Been Fed?
+    options:
+      - 'Yes'
+      - 'No'
+    icon: mdi:cat
+  pcoptions:
+    name: PC Power Options
+    options:
+      - Restart
+      - Shutdown
+      - None
+      - Sleep
+      - Hibernate
+    initial: None
+    icon: mdi:desktop-tower
+  radio_station:
+    name: 'Select Radio Station:'
+    options:
+      - Select Input
+      - NPR WFAE
+      - Man Up
+      - The End
+      - BBC Radio 1
+      - DnBRadio
+  chromecast_radio:
+    name: 'Select Speakers:'
+    options:
+      - Select Input
+      - Livingroom
+      - MasterBedroom
+      - Everywhere
+    initial: Everywhere
+    icon: mdi:speaker-wireless
+
+

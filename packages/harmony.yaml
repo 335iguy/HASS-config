@@ -1,0 +1,46 @@
+input_select:
+  harmony:
+    name: Harmony Activity
+    options:
+      - Select Input
+      - Power Off
+      - Watch TV
+      - Listen to Music
+    icon: mdi:remote
+remote:
+  - platform: harmony
+    name: livingroom
+    host: 10.0.0.105
+    port: 5222
+    scan_interval: 45
+automation:
+  - alias: Harmony
+    hide_entity: true
+    trigger:
+      platform: state
+      entity_id: input_select.harmony
+      from: Select Input
+    action:
+    - service: remote.turn_on
+      entity_id: remote.livingroom
+      data_template:
+        activity: "{% if is_state(\"input_select.harmony\", \"Watch TV\") %}\n  28317840\n\
+          {% elif is_state(\"input_select.harmony\", \"Listen to Music\") %}\n  28317631\n\
+          {% else %} {% endif %}\n"
+    - service: input_select.select_option
+      entity_id: input_select.harmony
+      data_template:
+        option: Select Input
+  - alias: Harmony Off
+    hide_entity: true
+    trigger:
+      platform: state
+      entity_id: input_select.harmony
+      to: Power Off
+    action:
+    - service: remote.turn_off
+      entity_id: remote.livingroom
+    - service: input_select.select_option
+      entity_id: input_select.harmony
+      data_template:
+        option: Select Input

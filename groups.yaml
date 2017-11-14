@@ -1,0 +1,125 @@
+### GROUPS ###
+## Default View ##
+#Speedtest:
+#  - sensor.speedtest_ping
+#   - sensor.speedtest_download 
+#   - sensor.speedtest_upload
+Automations:
+  - automation.rerun_alarm
+  - automation.trigger_when_door_is_opened
+Residence Radio:
+  - input_select.radio_station
+  - input_select.chromecast_radio
+  - script.ccradio
+  - media_player.house_group
+Links:
+  - weblink.router
+  - weblink.github 
+MasterBedroom:
+  - media_player.bedcast
+  - media_player.master_bedroom_speaker
+DSClimate:
+  - climate.downstairs
+  - sensor.operating_mode_down
+  - sensor.mode_down
+  - sensor.select_mode_up
+USClimate:
+  - climate.upstairs
+  - sensor.operating_mode_up
+  - sensor.mode_up
+  - sensor.select_mode_down
+Techy:
+  - sensor.cpu_use
+  - sensor.ram_use
+Bitcoin:
+  - sensor.exchange_rate_1_btc
+  - sensor.market_price 
+Travel:
+  - sensor.home_to_andrews_work
+  - sensor.home_to_bris_work
+  - sensor.home_to_shop
+  - sensor.bris_work_to_home
+Family:
+  - device_tracker.pixel2_bri
+  - device_tracker.pixel_andrew
+  - sensor.pixel2_battery
+  - sensor.pixel_battery 
+BeamerAndStella:
+  - input_select.cats_fed
+OfficeStuff:
+  - sensor.officetemp
+  - sensor.officehumid
+  - sensor.officemotion
+Scripts:
+  - script.ccradio
+  - script.goodnight
+  - script.light_flash
+  - script.light_loop
+  - script.daylight_lights
+  - script.test_script
+########## VIEWS ##########
+default_view:
+  name: DEFAULT
+  icon: mdi:home
+  view: yes
+  entities:
+    - group.residence_radio
+    - group.travel
+    - sensor.officetemp
+    - group.DSclimate
+    - group.USClimate
+    - group.family
+    - sensor.dark_sky_daily_high_temperature
+    - sensor.dark_sky_daily_low_temperature
+    - sensor.dark_sky_temperature
+    - sensor.pollen_level 
+LivingRoom:
+  name: Living Room
+  view: yes
+  entities:
+    - binary_sensor.downstairs_occupancy
+    - sensor.downstairs_temperature
+    - group.tvcontrol
+    - group.livingroomlights
+    - group.livingroommedia
+    - group.livingroomhouse
+Bedroom:
+  name: Master Bedroom
+  view: yes
+  entities:
+    - group.masterbedroom
+    - sensor.master_bedroom_temperature
+    - binary_sensor.master_bedroom_occupancy
+BonerRoom:
+  name: Boner Room
+  view: yes
+  entities:
+    - sensor.upstairs_temperature
+    - media_player.meowcast  
+Alarm:
+  name: Alarm
+  view: yes
+  entities:
+    - group.alarm_panel_card
+    - group.alarmstuff
+Office:
+  name: Office
+  view: yes
+  entities:
+    - group.OfficeStuff
+Stuff Other:
+  name: Other
+  view: yes
+  entities:
+    - group.scripts
+    - group.links
+    - group.automations
+    - group.Techy
+    - group.bitcoin
+    - group.scenes
+    - group.scripts
+    - sensor.heat_upstairs
+    - sensor.heat_downstairs
+    - sensor.AC_upstairs
+    - sensor.AC_downstairs
+    - group.scripts

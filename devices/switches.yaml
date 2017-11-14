@@ -1,0 +1,30 @@
+### SWITCHES ###
+##### ETEKCITY OUTLET SWITCHES #####
+  platform: rpi_rf
+  gpio: 17
+  switches:
+    livingroom_lamp:
+      protocol: 1
+      pulselength: 179
+      code_on: 5264691
+      code_off: 5264700
+    livingroom_couchL:
+      protocol: 1
+      pulselength: 181
+      code_on: 5264835
+      code_off: 5264844
+    livingroom_couchR:
+      protocol: 1
+      pulselength: 180
+      code_on: 5265155
+      code_off: 5265164
+    bedroom_icelights:
+      protocol: 1
+      pulselength: 179
+      code_on: 5266691
+      code_off: 5266700
+    office_lamp:
+      protocol: 1
+      pulselength: 182
+      code_on: 5272835
+      code_off: 5272844

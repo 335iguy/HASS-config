@@ -1,0 +1,4 @@
+ shutdown_gtx1070: 'curl -u User:a58r874 -k http://10.0.0.110:2580/?action=System.Shutdown'
+ restart_gtx1070: 'curl -u User:a58r874 -k http://10.0.0.110:2580/?action=System.Restart'
+ sleep_gtx1070: 'curl -u User:a58r874 -k http://10.0.0.110:2580/?action=System.Sleep'
+ hibernate_gtx1070: 'curl -u User:a58r874 -k http://10.0.0.110:2580/?action=System.Hibernate'

@@ -1,0 +1,100 @@
+homeassistant:
+  customize:
+    media_player.livingroom:
+      icon: mdi:google
+      friendly_name: Google Home
+    sensor.current_activity:
+      hidden: false
+      entity_picture: http://wreckage.johndenverschoolofflight.com/hass/harmony.png
+      friendly_name: "Current Activity"
+    group.LivingRoomLights:
+      friendly_name: Living Room Lights
+automation:
+  - alias: Media player paused/stopped
+    trigger:
+      platform: state
+      entity_id: media_player.dogecast
+      to: 'off'
+    condition:
+      condition: state
+      entity_id: sun.sun
+      state: below_horizon
+    action:
+      service: scene.turn_on
+      entity_id: scene.livingroom_normal
+  - alias: Media player playing
+    trigger:
+      platform: state
+      entity_id: media_player.dogecast
+      to: 'playing'
+    condition:
+      condition: state
+      entity_id: sun.sun
+      state: below_horizon
+    action:
+      service: scene.turn_on
+      entity_id: scene.livingroom_dim
+scene:
+  - name: LivingRoom Normal
+    entities:
+        light.couch_left:
+          state: on
+          brightness: 170
+          transition: 30
+          color_temp: 367
+        light.couch_right:
+          state: on
+          transition: 30
+          brightness: 170
+          color_temp: 367
+        light.google_lamp:
+          state: on
+          transition: 30
+          brightness: 170
+          color_temp: 367
+  - name: LivingRoom Dim
+    entities:
+        light.couch_left:
+          state: on
+          transition: 30
+          brightness: 25
+          color_temp: 450
+        light.couch_right:
+          state: on
+          transition: 30
+          brightness: 25
+          color_temp: 450
+        light.google_lamp:
+          state: on
+          transition: 30
+          brightness: 25
+          color_temp: 450
+group:
+  LivingRoomLights:
+    - light.google_lamp
+    - light.couch_left
+    - light.couch_right 
+  LivingRoomMedia:
+    - media_player.dogecast
+    - media_player.living_room
+  TVControl:
+    - input_select.harmony
+    - sensor.current_activity
+  Scenes:
+    - scene.livingroom_dim
+    - scene.livingroom_normal
+script:
+  goodnight:
+    alias: Put the House to Bed
+    sequence:
+      - service: light.turn_off
+        entity_id: 
+          - light.couch_left
+          - light.couch_right
+          - light.google_lamp
+      - service: media_player.turn_off
+        entity_id:
+          - media_player.livingroom
+      - service: remote.turn_off
+        entity_id:
+          - remote.living_room

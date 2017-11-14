@@ -1,0 +1,91 @@
+homeassistant:
+  name: Home
+  latitude: !secret latitude
+  longitude: !secret longitude
+  elevation: 203
+  unit_system: imperial
+  time_zone: America/New_York
+  customize: !include customize.yaml
+  packages: !include_dir_named packages
+
+# YAML Files
+group: !include groups.yaml
+script: !include scripts.yaml
+sensor: !include devices/sensors.yaml
+media_player: !include devices/media_players.yaml
+input_select: !include input_select.yaml
+shell_command: !include shell_commands.yaml
+weblink: !include web_links.yaml
+zone: !include zones.yaml
+
+# MAIN CONFIGS #
+config:
+http:
+   api_password: !secret api_password
+   server_port: 8123
+   base_url: !secret duckdns_url
+   ssl_certificate: !secret fullchain
+   ssl_key: !secret privkey
+   cors_allowed_origins:
+     - https://google.com
+     - https://home-assistant.io
+   use_x_forwarded_for: True
+   trusted_networks:
+     - 127.0.0.1
+     - ::1
+     - 192.168.0.0/24
+     - 192.168.1.0/24
+   ip_ban_enabled: True
+   login_attempts_threshold: 3
+ifttt:
+  key: !secret ifttt_key
+device_tracker:
+  - platform: nmap_tracker
+    hosts:
+     - !secret dev_tracker_bri
+     - !secret dev_tracker_andrew
+    home_interval: 10
+    interval_seconds: 120
+    consider_home: 180
+    track_new_devices: true
+ecobee:
+  api_key: !secret ecobee_api
+updater:
+discovery:
+history:
+logbook:
+map:
+sun:
+tts:
+  - platform: google
+    cache: true
+    cache_dir: /tmp/tts
+    time_memory: 300
+notify:
+  - platform: pushbullet
+    api_key: !secret pushbullet_key
+mqtt:
+  broker: !secret host_ip
+  port: 1883
+  client_id: home-assistant-1
+  username: !secret mqtt_un
+  password: !secret mqtt_pw
+usps:
+    username: !secret usps_un
+    password: !secret usps_pw
+camera:
+  - platform: usps
+    scan_interval: 5
+#emulated_hue:
+#  listen_port: 80
+recorder:
+  db_url: sqlite:///data/home-assistant_v2.db
+  purge_interval: 2
+  purge_keep_days: 5
+emulated_hue:
+  expose_by_default: false
+  host_ip: !secret host_ip
+  listen_port: 8300
+  exposed_domains:
+    - light
+
