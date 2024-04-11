@@ -1,0 +1,209 @@
+type: custom:stack-in-card
+keep:
+  margin: true
+  background: true
+  border_radius: true
+  box_shadow: true
+cards:
+  - type: horizontal-stack
+    cards:
+      - type: custom:button-card
+        tap_action:
+          action: more-info
+        hold_action:
+          action: none
+        entity: person.andrew
+        entity_picture: /local/andrew.png
+        show_icon: false
+        show_entity_picture: true
+        show_name: false
+        size: 90%
+        styles:
+          entity_picture:
+            - border-radius: 100%
+          card:
+            - height: 60px
+            - width: 60px
+            - border-radius: 100%
+            - background-color: transparent
+      - type: vertical-stack
+        cards:
+          - type: horizontal-stack
+            cards:
+              - type: custom:button-card
+                entity: person.andrew
+                show_icon: true
+                show_name: false
+                show_state: false
+                icon: mdi:home-clock
+                size: 80%
+                tap_action:
+                  action: none
+                hold_action:
+                  action: none
+                styles:
+                  card:
+                    - width: 26px
+                    - height: 30px
+                    - margin-left: 0px
+                    - margin-left: '-8px'
+                    - background-color: transparent
+                  icon:
+                    - color: rgb(187, 29, 29, 1)
+                state:
+                  - value: home
+                    icon: mdi:home
+                    styles:
+                      icon:
+                        - color: rgb(90, 153 ,92, 1)
+                  - value: Work
+                    icon: mdi:school
+                    styles:
+                      icon:
+                        - color: rgb(95, 144, 189)
+              - type: custom:button-card
+                entity: person.andrew
+                show_name: false
+                show_state: false
+                show_icon: false
+                show_label: true
+                tap_action:
+                  action: none
+                hold_action:
+                  action: none
+                label: |
+                  [[[
+                     if ((( states['person.andrew'].state == 'home'))) return 'Andrew is Home.';
+                      else if ((( states['person.andrew'].state == 'Flexential'))) return 'Andrew is at Flexential.';
+                      else if ((( states['person.andrew'].state == 'not_home'))) return 'Andrew is Away';
+                  ]]]
+                styles:
+                  card:
+                    - height: 30px
+                    - margin-left: '-6px'
+                    - background-color: transparent
+                  label:
+                    - font-size: 14px
+                    - font-color: rgb(70, 67, 66, 1)
+                    - font-weight: 400
+                    - justify-self: left
+          - type: horizontal-stack
+            cards:
+              - type: horizontal-stack
+                cards:
+                  - type: custom:button-card
+                    entity: sensor.ap7_battery_level
+                    show_icon: true
+                    show_name: false
+                    show_state: false
+                    tap_action:
+                      action: none
+                    hold_action:
+                      action: none
+                    size: 100%
+                    styles:
+                      card:
+                        - width: 20px
+                        - height: 30px
+                        - margin-top: '-10px'
+                        - background-color: transparent
+                        - margin-left: |
+                            [[[
+                              if ( states['binary_sensor.ap7_is_charging'].state == 'off') return ' -6px'; 
+                              if ( states['binary_sensor.ap7_is_charging'].state == 'on') return ' -2px';  
+                            ]]]
+                      icon:
+                        - color: |
+                            [[[
+                              if (entity.state < 20) return 'rgb(187, 29, 29, 1)';
+                              if (entity.state < 40) return 'rgb(255, 176, 102, 1)';
+                              if (entity.state < 60) return 'rgb(255, 202, 55, 1)';
+                              if (entity.state < 80) return 'yellowgreen';
+                              if (entity.state < 101) return 'rgb(90, 153 ,92, 1)';
+                            ]]]
+                  - type: custom:button-card
+                    entity: sensor.ap7_battery_level
+                    show_icon: false
+                    show_name: false
+                    show_state: true
+                    tap_action:
+                      action: none
+                    hold_action:
+                      action: none
+                    styles:
+                      card:
+                        - height: 30px
+                        - width: 40px
+                        - margin-top: '-8px'
+                        - margin-left: 0px
+                        - background-color: transparent
+                      state:
+                        - font-size: 14px
+                        - font-color: rgb(70, 67, 66, 1)
+                        - font-weight: 400
+                        - justify-self: left
+                  - type: custom:button-card
+                    entity: proximity.andrew_home
+                    show_icon: true
+                    show_name: false
+                    show_state: false
+                    tap_action:
+                      action: none
+                    hold_action:
+                      action: none
+                    size: 100%
+                    styles:
+                      card:
+                        - width: 0px
+                        - height: 20px
+                        - margin-top: '-4px'
+                        - background-color: transparent
+                        - border-radius: 0%
+                        - border-left: 1px solid rgb(70, 67, 66, 1)
+                      icon:
+                        - color: rgb(70, 67, 66, 1)
+                  - type: custom:button-card
+                    entity: sensor.adisthome_distance
+                    show_icon: true
+                    show_name: false
+                    show_state: false
+                    tap_action:
+                      action: none
+                    hold_action:
+                      action: none
+                    size: 100%
+                    styles:
+                      card:
+                        - width: 20px
+                        - height: 30px
+                        - margin-top: '-9px'
+                        - margin-left: 12px
+                        - background-color: transparent
+                      icon:
+                        - color: rgb(70, 67, 66, 1)
+                  - type: custom:button-card
+                    entity: sensor.adisthome_distance
+                    show_icon: false
+                    show_name: false
+                    show_state: false
+                    show_label: true
+                    label: >
+                      [[[ return states['sensor.adisthome_distance'].state + '
+                      mi from home.';
+
+                      ]]]
+                    tap_action:
+                      action: none
+                    hold_action:
+                      action: none
+                    styles:
+                      card:
+                        - height: 30px
+                        - margin-top: '-8px'
+                        - margin-left: '-2px'
+                        - background-color: transparent
+                      label:
+                        - font-size: 14px
+                        - font-color: rgb(70, 67, 66, 1)
+                        - font-weight: 400
+                        - justify-self: left
